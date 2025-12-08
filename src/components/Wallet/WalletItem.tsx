@@ -30,6 +30,23 @@ interface Tag {
 }
 type CategoryKey = "Devices" | "Pools" | "Features";
 // Mapping of categories to icons
+
+
+
+
+// Define the specific links for wallet features
+const FEATURE_URLS: { [key: string]: string } = {
+  // *** REQUIRED: UPDATE THESE LINKS TO THE CORRECT WIKI PAGES ***
+  "Shielded Pools": "https://zechub.wiki/using-zcash/shielded-pools",
+  "Unified Addresses": "https://zechub.wiki/using-zcash/unified-addresses",
+  "Memo Field": "https://zechub.wiki/using-zcash/memo-field",
+  "Full Node": "https://zechub.wiki/using-zcash/full-node-vs-light-client",
+  "Light Client": "https://zechub.wiki/using-zcash/full-node-vs-light-client",
+};
+
+const DEFAULT_FEATURE_URL = "https://zechub.wiki/using-zcash/shielded-pools";
+
+
 const categoryIcons = {
   Devices: MdDevices,
   Pools: MdPool,
@@ -121,16 +138,21 @@ const WalletItem: React.FC<WalletItemProps> = ({
                     className="icon-class"
                     size="medium"
                   />
-                  {tag.values.map((value, valueIndex) => (
-                    <div
-                      key={valueIndex}
-                      className="wallet-tag-item bg-slate-200 dark:bg-slate-900"
-                    >
-                      <Link href="https://zechub.wiki/using-zcash/shielded-pools">
-                        {value}
-                      </Link>
-                    </div>
-                  ))}
+                  {tag.values.map((value, valueIndex) => {
+                    // 1. Look up the specific URL using the feature name (value)
+                    const featureLink = FEATURE_URLS[value] || DEFAULT_FEATURE_URL;
+
+                    return (
+                      <div
+                        key={valueIndex}
+                        className="wallet-tag-item bg-slate-200 dark:bg-slate-900"
+                      >
+                        <Link href={featureLink}>
+                          {value}
+                        </Link>
+                      </div>
+                    );
+                  })}
                 </div>
               </React.Fragment>
             ))}
